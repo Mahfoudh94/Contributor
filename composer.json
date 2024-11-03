@@ -11,6 +11,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
+        "lorisleiva/laravel-actions": "^2.8",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
