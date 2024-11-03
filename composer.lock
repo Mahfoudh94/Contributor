@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40de1202840369869a608bbc1a5ea02b",
+    "content-hash": "eeb3a94627d96657e1c28cafbcbc2855",
     "packages": [
         {
             "name": "brick/math",
@@ -7877,6 +7877,73 @@
             "time": "2022-02-21T01:04:05+00:00"
         },
         {
+            "name": "phpdocumentor/reflection",
+            "version": "6.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpDocumentor/Reflection.git",
+                "reference": "61e2f1fe7683e9647b9ed8d9e53d08699385267d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpDocumentor/Reflection/zipball/61e2f1fe7683e9647b9ed8d9e53d08699385267d",
+                "reference": "61e2f1fe7683e9647b9ed8d9e53d08699385267d",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/php-parser": "~4.18 || ^5.0",
+                "php": "8.1.*|8.2.*|8.3.*",
+                "phpdocumentor/reflection-common": "^2.1",
+                "phpdocumentor/reflection-docblock": "^5",
+                "phpdocumentor/type-resolver": "^1.2",
+                "symfony/polyfill-php80": "^1.28",
+                "webmozart/assert": "^1.7"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+                "doctrine/coding-standard": "^12.0",
+                "mikey179/vfsstream": "~1.2",
+                "mockery/mockery": "~1.6.0",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-webmozart-assert": "^1.2",
+                "phpunit/phpunit": "^10.0",
+                "psalm/phar": "^5.24",
+                "rector/rector": "^1.0.0",
+                "squizlabs/php_codesniffer": "^3.8"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-5.x": "5.3.x-dev",
+                    "dev-6.x": "6.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\": "src/phpDocumentor"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Reflection library to do Static Analysis for PHP Projects",
+            "homepage": "http://www.phpdoc.org",
+            "keywords": [
+                "phpDocumentor",
+                "phpdoc",
+                "reflection",
+                "static analysis"
+            ],
+            "support": {
+                "issues": "https://github.com/phpDocumentor/Reflection/issues",
+                "source": "https://github.com/phpDocumentor/Reflection/tree/6.0.0"
+            },
+            "time": "2024-05-23T19:28:12+00:00"
+        },
+        {
             "name": "phpdocumentor/reflection-common",
             "version": "2.2.0",
             "source": {
@@ -8520,6 +8587,60 @@
                 }
             ],
             "time": "2024-10-19T13:05:19+00:00"
+        },
+        {
+            "name": "riimu/kit-pathjoin",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Riimu/Kit-PathJoin.git",
+                "reference": "8ad2656c79527dba9f7f20e1229dcd38abfe8cee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Riimu/Kit-PathJoin/zipball/8ad2656c79527dba9f7f20e1229dcd38abfe8cee",
+                "reference": "8ad2656c79527dba9f7f20e1229dcd38abfe8cee",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.3",
+                "phpunit/phpunit": "^5.7 || ^6.2",
+                "squizlabs/php_codesniffer": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Riimu\\Kit\\PathJoin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Riikka Kalliomäki",
+                    "email": "riikka.kalliomaki@gmail.com",
+                    "homepage": "http://riimu.net"
+                }
+            ],
+            "description": "Cross-platform library for normalizing and joining file system paths",
+            "homepage": "http://kit.riimu.net",
+            "keywords": [
+                "file",
+                "join",
+                "normalize",
+                "path",
+                "system"
+            ],
+            "support": {
+                "issues": "https://github.com/Riimu/Kit-PathJoin/issues",
+                "source": "https://github.com/Riimu/Kit-PathJoin/tree/master"
+            },
+            "time": "2017-07-09T14:41:04+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -9445,6 +9566,66 @@
             "time": "2024-10-09T05:16:32+00:00"
         },
         {
+            "name": "spatie/laravel-package-tools",
+            "version": "1.16.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-package-tools.git",
+                "reference": "c7413972cf22ffdff97b68499c22baa04eddb6a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-package-tools/zipball/c7413972cf22ffdff97b68499c22baa04eddb6a2",
+                "reference": "c7413972cf22ffdff97b68499c22baa04eddb6a2",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^9.28|^10.0|^11.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.5",
+                "orchestra/testbench": "^7.7|^8.0",
+                "pestphp/pest": "^1.22",
+                "phpunit/phpunit": "^9.5.24",
+                "spatie/pest-plugin-test-time": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\LaravelPackageTools\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Tools for creating Laravel packages",
+            "homepage": "https://github.com/spatie/laravel-package-tools",
+            "keywords": [
+                "laravel-package-tools",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-package-tools/issues",
+                "source": "https://github.com/spatie/laravel-package-tools/tree/1.16.5"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-08-27T18:56:10+00:00"
+        },
+        {
             "name": "symfony/yaml",
             "version": "v7.1.6",
             "source": {
@@ -9623,6 +9804,81 @@
                 }
             ],
             "time": "2024-03-03T12:36:25+00:00"
+        },
+        {
+            "name": "wulfheart/laravel-actions-ide-helper",
+            "version": "v0.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Wulfheart/laravel-actions-ide-helper.git",
+                "reference": "48e9d7c89804fcd459a73cc22adee533e7a88deb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Wulfheart/laravel-actions-ide-helper/zipball/48e9d7c89804fcd459a73cc22adee533e7a88deb",
+                "reference": "48e9d7c89804fcd459a73cc22adee533e7a88deb",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^10.0|^11.0",
+                "lorisleiva/laravel-actions": "^2.3",
+                "lorisleiva/lody": "^0.5.0",
+                "php": "^8.1|^8.2",
+                "phpdocumentor/reflection": "^5.1|^6.0",
+                "riimu/kit-pathjoin": "^1.2",
+                "spatie/laravel-package-tools": "^1.14"
+            },
+            "require-dev": {
+                "brianium/paratest": "^6.8|^7.4",
+                "nunomaduro/collision": "^6.1|^8.0",
+                "orchestra/testbench": "^8.0|^9.0",
+                "pestphp/pest": "^1.22|^2.34",
+                "phpunit/phpunit": "^9.5.10|^10.5",
+                "spatie/invade": "^1.1|^2.0",
+                "spatie/laravel-ray": "^1.32",
+                "spatie/pest-plugin-snapshots": "^1.1|^2.1",
+                "vimeo/psalm": "^5.6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wulfheart\\LaravelActionsIdeHelper\\LaravelActionsIdeHelperServiceProvider"
+                    ],
+                    "aliases": {
+                        "LaravelActionsIdeHelper": "Wulfheart\\LaravelActionsIdeHelper\\LaravelActionsIdeHelperFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wulfheart\\LaravelActionsIdeHelper\\": "src",
+                    "Wulfheart\\LaravelActionsIdeHelper\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Wulf",
+                    "email": "dev@alexfwulf.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Generate a new IDE Helper file for Laravel Actions.",
+            "homepage": "https://github.com/wulfheart/laravel-actions-ide-helper",
+            "keywords": [
+                "laravel",
+                "laravel-actions-ide-helper",
+                "wulfheart"
+            ],
+            "support": {
+                "issues": "https://github.com/Wulfheart/laravel-actions-ide-helper/issues",
+                "source": "https://github.com/Wulfheart/laravel-actions-ide-helper/tree/v0.8.0"
+            },
+            "time": "2024-08-30T14:32:22+00:00"
         }
     ],
     "aliases": [],
