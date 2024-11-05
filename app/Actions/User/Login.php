@@ -2,7 +2,9 @@
 
 namespace App\Actions\User;
 
+use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -13,7 +15,7 @@ class Login
     /**
      * @throws Exception
      */
-    public function handle($accessToken, $provider): array
+    public function handle($accessToken, $provider): User
     {
         $providerUser = Socialite::driver($provider)->userFromToken($accessToken);
 
@@ -22,11 +24,9 @@ class Login
         } else {
             $user = $providerUser;
         }
-        auth()->login($user);
+        Auth::login($user);
         if (auth()->check()) {
-            return [
-                'token' => auth()->user()->createToken('API Token')->plainTextToken
-            ];
+            return $user;
         } else {
             throw new Exception('Failed to Login try again');
         }

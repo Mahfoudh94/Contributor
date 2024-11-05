@@ -12,7 +12,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('Homepage');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -22,6 +22,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/auth/callback', function () {
+    return \Laravel\Socialite\Facades\Socialite::driver('github')->user();
+});
+Route::get('/auth/github', function ($provider) {
+    return \Laravel\Socialite\Facades\Socialite::driver('github')->redirect();
 });
 
 require __DIR__.'/auth.php';

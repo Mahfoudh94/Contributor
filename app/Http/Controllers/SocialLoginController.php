@@ -10,11 +10,9 @@ class SocialLoginController extends Controller
     public function login(SocialLoginRequest $request)
     {
         try {
-            $user_info = Login::run($request->get('access_token'), $request->get('provider'));
-            return response()->json([
-                'status' => true,
-                'data' => $user_info
-            ]);
+            Login::run($request->get('access_token'), $request->get('provider'));
+            $request->session()->regenerate();
+            return redirect()->route('dashboard');
         } catch (Exception $exception) {
             return response()->json([
                 'status' => false,
