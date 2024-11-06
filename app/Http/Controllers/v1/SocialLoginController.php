@@ -14,7 +14,7 @@ class SocialLoginController extends Controller
         try {
             /** @var User $user */
             $user = Login::run($request->get('access_token'), $request->get('provider'));
-            response()->json([
+            return response()->json([
                 'status' => true,
                 'data' => $user->createToken('API Token')->plainTextToken
             ]);
@@ -24,6 +24,5 @@ class SocialLoginController extends Controller
                 'message' => $exception->getMessage()
             ], 400);
         }
-        return 'Naaaaaaaaah, it won\t return, yet the IDE complains about it';
     }
 }
