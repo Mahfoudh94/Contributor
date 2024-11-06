@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api\v1;
 use App\Actions\User\Login;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\api\auth\SocialLoginRequest;
