@@ -1,23 +1,26 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Actions\User\Login;
-use App\Http\Requests\api\auth\SocialLoginRequest;
+
+use App\Actions\User\auth\github\HandleGithubCallBack;
+use App\Actions\User\auth\github\RedirectToGithub;
+use Illuminate\Http\RedirectResponse;
 use Exception;
 
 class SocialLoginController extends Controller
 {
-    public function login(SocialLoginRequest $request)
+    public function redirectToGithub(): RedirectResponse
+    {
+        return RedirectToGithub::run();
+    }
+
+    public function handleGithubCallback()
     {
         try {
-            Login::run($request->get('access_token'), $request->get('provider'));
-            $request->session()->regenerate();
-            return redirect()->route('dashboard');
-        } catch (Exception $exception) {
-            return response()->json([
-                'status' => false,
-                'message' => $exception->getMessage()
-            ], 400);
+            HandleGithubCallBack::run();
+            return redirect()->back();
+        } catch (Exception) {
+            abort(404);
         }
     }
 }

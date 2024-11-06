@@ -1,22 +1,18 @@
 <?php
 
-namespace App\Actions\User;
+namespace App\Actions\User\auth\github;
 
-use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class RedirectToGithub
 {
     use AsAction;
 
-    public function handle()
+    public function handle(): RedirectResponse
     {
         return Socialite::driver('github')->redirect();
     }
 
-    public function asController(Request $request)
-    {
-        return $this->handle();
-    }
 }

@@ -10,14 +10,14 @@ const form = useForm({
     name: '',
     email: '',
     password: '',
-    password_confirmation: '',
+    password_confirmation: ''
 });
 
 const submit = () => {
     form.post(route('register'), {
         onFinish: () => {
             form.reset('password', 'password_confirmation');
-        },
+        }
     });
 };
 </script>
@@ -109,6 +109,25 @@ const submit = () => {
                 >
                     Register
                 </PrimaryButton>
+                <div class="mt-4 flex items-center justify-end">
+                    <a
+                        :href="route('auth.github')"
+                        class="btn"
+                        style="
+                            background: black;
+                            padding: 10px;
+                            width: 100%;
+                            text-align: center;
+                            display: block;
+                            border-radius: 4px;
+                            color: #ffffff;
+                        "
+                    >
+                        Login with Github
+
+                    </a>
+
+                </div>
             </div>
         </form>
     </GuestLayout>
