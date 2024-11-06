@@ -21,7 +21,7 @@ class SocialLoginRequest extends FormRequest
     {
         return [
             'access_token' => ['required', 'string'],
-            'provider' => ['required','string'],
+            'provider' => ['required','in:github'],
         ];
     }
 }
