@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\User\RedirectToGithub;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -24,11 +25,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/auth/callback', function () {
+Route::get('/auth/github/callback', function () {
     return \Laravel\Socialite\Facades\Socialite::driver('github')->user();
 });
-Route::get('/auth/github', function ($provider) {
-    return \Laravel\Socialite\Facades\Socialite::driver('github')->redirect();
-});
+
+Route::get('/auth/github', [RedirectToGithub::class])->name('github');
 
 require __DIR__.'/auth.php';
