@@ -6,6 +6,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Divider from 'primevue/divider';
 
 defineProps<{
     canResetPassword?: boolean;
@@ -93,6 +94,17 @@ const submit = () => {
                     Log in
                 </PrimaryButton>
             </div>
+            <Divider class="mx-10 my-4" />
+            <p class="text-center text-gray-600">
+                You don't own an account?
+                <Link
+                    class="transition duration-200 hover:text-white"
+                    :href="route('register')"
+                    replace
+                >
+                    Sign up
+                </Link>
+            </p>
         </form>
     </GuestLayout>
 </template>
