@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GitHubRepoResource extends JsonResource
+class RepoBranchesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,7 +16,10 @@ class GitHubRepoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name' => $this['name'],
+            'name' => $this->name,
+            'commit_sha' => $this->commit->sha,
+            'commit_url' => $this->commit->url,
+            'protected' => $this->protected,
         ];
     }
 }
