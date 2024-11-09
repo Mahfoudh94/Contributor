@@ -12,7 +12,7 @@ class RedirectToGithub
 
     public function handle(): RedirectResponse
     {
-        return Socialite::driver('github')->redirect();
+        return Socialite::driver('github')->stateless()->redirect();
     }
 
 }
