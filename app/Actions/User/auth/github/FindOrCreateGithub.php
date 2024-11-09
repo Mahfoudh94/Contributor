@@ -39,11 +39,6 @@ class FindOrCreateGithub
                 $user->markEmailAsVerified();
             }
 
-            $user->linkedSocialAccounts()->create([
-                'provider_id' => $providerUser->getId(),
-                'provider_name' => 'github',
-            ]);
-
             return $user;
         }
     }

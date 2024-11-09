@@ -2,6 +2,7 @@
 
 namespace App\Actions\User\auth\github;
 
+use App\Actions\SocialAccount\FindGithubLinkedSocialAccount;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -16,18 +17,26 @@ class HandleGithubCallBack
      */
     public function handle()
     {
-        $providerUser = Socialite::driver('github')->user();
+        $providerUser = Socialite::driver('github')->stateless()->user();
 
-        if (filled($providerUser)) {
-            $user = FindOrCreateGithub::run($providerUser);
+        // Attempt to find a linked social account
+        $linkedSocialAccount = FindGithubLinkedSocialAccount::run($providerUser);
+
+        // If a linked social account is found, retrieve the user
+        if ($linkedSocialAccount) {
+            $user = $linkedSocialAccount->user;
         } else {
-            $user = $providerUser;
+            $user = HandleGithubProviderUser::run($providerUser);
         }
+
+        // Attempt to log in the user
         Auth::login($user);
+
+        // Confirm successful login
         if (auth()->check()) {
             return $user;
-        } else {
-            throw new Exception('Failed to Login try again');
         }
+
+        throw new Exception('Failed to Login. Try again.');
     }
 }

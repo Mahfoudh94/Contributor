@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(LinkedSocialAccount::class);
     }
+    public function githubAccount(): HasOne
+    {
+        return $this->hasOne(UserGithubAccount::class, 'user_id');
+    }
+
 }
