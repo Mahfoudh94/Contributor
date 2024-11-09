@@ -2,11 +2,12 @@
 
 namespace App\Actions\Github;
 
+use App\Http\Resources\GitHubRepoResource;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class GetGithubProjects
+class GetGithubRepositories
 {
     use AsAction;
 
@@ -16,9 +17,10 @@ class GetGithubProjects
     public function handle()
     {
         $githubAccount = auth()->user()->githubAccount;
-        $response = Http::withToken($githubAccount->github_token)
-            ->get("https://api.github.com/users/{{$githubAccount->account_name}}/repos");
 
-        return $response->json();
+        $repos = Http::withToken($githubAccount->github_token)
+            ->get("https://api.github.com/users/{$githubAccount->account_name}/repos")->collect();
+
+        return GitHubRepoResource::collection($repos);
     }
 }

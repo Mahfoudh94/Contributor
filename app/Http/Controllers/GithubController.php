@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Github\GetGithubRepositories;
 use Illuminate\Http\Request;
 
 class GithubController extends Controller
 {
-    public function getProjects()
-    {
-        // Code to get GitHub projects
-    }
 
     public function showProjects()
     {
-        // Code to show GitHub projects in a view
+       return GetGithubRepositories::run();
     }
 
     public function getBranches($repo)

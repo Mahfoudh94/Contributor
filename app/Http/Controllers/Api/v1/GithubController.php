@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Actions\Github\GetGithubProjects;
+use App\Actions\Github\GetGithubRepositories;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -10,7 +10,7 @@ class GithubController extends Controller
 {
     public function getProjects()
     {
-        GetGithubProjects::run();
+        GetGithubRepositories::run();
     }
 
     public function showProjects()
