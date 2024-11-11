@@ -1,135 +1,105 @@
 <script setup lang="ts">
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import AuthPagesLayout from '@/Layouts/AuthPagesLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
-    password_confirmation: ''
+    remember: false,
 });
 
 const submit = () => {
     form.post(route('register'), {
         onFinish: () => {
-            form.reset('password', 'password_confirmation');
-        }
+            form.reset('password');
+        },
     });
 };
+
+defineOptions({
+    layout: AuthPagesLayout,
+});
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Register" />
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
-
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
+    <Head title="Register to Contributors" />
+    <h1 class="my-2 text-5xl font-bold">
+        Create new account
+        <span class="text-primary">.</span>
+    </h1>
+    <p class="pb-8 text-white/60">
+        Already having an account?
+        <Link
+            :href="route('login')"
+            class="border-b border-b-primary/0 pb-0.5 text-primary transition duration-200 hover:border-b-primary"
+            replace
+        >
+            Log in
+        </Link>
+    </p>
+    <form @submit.prevent="submit" class="flex flex-col gap-8">
+        <div class="flex w-full flex-row gap-8">
+            <FloatLabel variant="on">
+                <InputText
+                    v-model="form.firstName"
+                    id="firstName"
+                    size="large"
+                    class="w-full !bg-surface-900 !px-8"
                 />
-
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
+                <label for="firstName">First Name</label>
+            </FloatLabel>
+            <FloatLabel variant="on">
+                <InputText
+                    v-model="form.lastName"
+                    id="lastName"
+                    size="large"
+                    class="w-full !bg-surface-900 !px-8"
                 />
+                <label for="lastName">Last Name</label>
+            </FloatLabel>
+        </div>
+        <FloatLabel variant="on">
+            <InputText
+                v-model="form.email"
+                id="email"
+                size="large"
+                class="w-full !bg-surface-900 !px-8"
+            />
+            <label for="email">Email</label>
+        </FloatLabel>
+        <FloatLabel variant="on">
+            <InputText
+                v-model="form.password"
+                id="password"
+                size="large"
+                class="w-full !bg-surface-900 !px-8"
+            />
+            <label for="password">Password</label>
+        </FloatLabel>
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-                    replace
-                >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Register
-                </PrimaryButton>
-                <div class="mt-4 flex items-center justify-end">
-                    <a
-                        :href="route('auth.github')"
-                        class="btn"
-                        style="
-                            background: black;
-                            padding: 10px;
-                            width: 100%;
-                            text-align: center;
-                            display: block;
-                            border-radius: 4px;
-                            color: #ffffff;
-                        "
-                    >
-                        Login with Github
-
-                    </a>
-
-                </div>
-            </div>
-        </form>
-    </GuestLayout>
+        <div
+            class="flex flex-shrink-0 flex-row items-center justify-end gap-2 px-4"
+        >
+            <Checkbox v-model="form.remember" />
+            <label class="me-auto">Remember me.</label>
+            <Button size="large" type="submit"> Create account </Button>
+            <Divider layout="vertical" pt:content:class="font-bold">
+                OR
+            </Divider>
+            <Link :href="route('auth.github')">
+                <Button size="large" outlined> Sign in with GitHub </Button>
+            </Link>
+        </div>
+        <p class="w-full text-center">
+            By creating an account, you agree to our
+            <Link
+                :href="route('_tos')"
+                class="border-b border-b-primary/0 pb-0.5 text-primary transition duration-200 hover:border-b-primary"
+            >
+                terms of service.
+            </Link>
+        </p>
+    </form>
 </template>

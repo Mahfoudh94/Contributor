@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoomsController;
+use App\Http\Controllers\TasksController;
 use App\Http\Controllers\GithubController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +57,7 @@ Route::middleware('auth')->group(function () {
         // Initiate a Fork (display fork status in a view)
         Route::post('/{repo}/fork', [GithubController::class, 'createFork']);
 
+        Route::get('/terms', fn () => "nothing for now")->name('_tos');
 
     });
 });

@@ -3,12 +3,12 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import Components from "unplugin-vue-components/vite";
 import { PrimeVueResolver } from "@primevue/auto-import-resolver";
+import DefineOption from 'unplugin-vue-define-options/vite'
 
 export default defineConfig({
     plugins: [
         laravel({
             input: 'resources/js/app.ts',
-            ssr: 'resources/js/ssr.ts',
             refresh: true,
         }),
         vue({
@@ -22,6 +22,7 @@ export default defineConfig({
         Components({
             resolvers: [PrimeVueResolver()],
         }),
+        DefineOption(),
     ],
     resolve: {
         alias: {
