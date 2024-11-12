@@ -2,32 +2,50 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Actions\Github\GetRepoBranches;
+use App\Actions\Github\GetRepoPullRequests;
 use App\Actions\Github\GetReps;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\RepoPRRequest;
+use Exception;
 
 class GithubController extends Controller
 {
-    public function getProjects()
-    {
-        GetReps::run();
-    }
-
     public function showProjects()
     {
-        // Code to show GitHub projects in a view
+        try {
+            return GetReps::run();
+        } catch (Exception) {
+            return response()->json([
+                'status' => false,
+                'message' => 'problem getting info from this user'
+            ], 400);
+        }
+
     }
 
-    public function getBranches($repo)
+    public function showBranches(string $repo)
     {
-        // Code to get branches from a specific repository
+        try {
+            return GetRepoBranches::run($repo);
+        } catch (Exception) {
+            return response()->json([
+                'status' => false,
+                'message' => 'problem getting info from this repo'
+            ], 400);
+        }
     }
 
-    public function showBranches($repo)
+    public function showPullRequests(string $repo, RepoPRRequest $request ,string $branch = null)
     {
-        // Code to show branches in a view
+        try {
+            return GetRepoPullRequests::run($repo, $request->input('owner_id'),$branch);
+        } catch (Exception) {
+            return response()->json([
+                'status' => false,
+                'message' => 'problem getting info from this repo'
+            ], 400);
+        }
     }
-
-    // Add other methods for each route
 }
 
