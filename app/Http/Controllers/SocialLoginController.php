@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\User\auth\github\HandleGithubCallBack;
 use App\Actions\User\auth\github\RedirectToGithub;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Exception;
 

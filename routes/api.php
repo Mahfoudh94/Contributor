@@ -1,34 +1,49 @@
 <?php
 
+use App\Http\Controllers\Api\v1\GithubController;
 use App\Http\Controllers\Api\v1\SocialLoginController;
-use App\Http\Controllers\Api\v1\GitHubController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-    Route::post('/social_login', [SocialLoginController::class, 'login']);
+
+    Route::get('/auth/github', [SocialLoginController::class, 'redirectToGithub']);
+    Route::get('/auth/github/callback', [SocialLoginController::class, 'handleGithubCallback']);
 
     // Define the API prefix for GitHub routes
-    Route::prefix('github')->middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
 
-        // Retrieve Projects
-        Route::get('/projects', [GitHubController::class, 'getProjects']);
+        Route::prefix('github')->group(function () {
+            Route::middleware('github.read')->group(function () {
 
-        // Retrieve Branches from a Selected Repository
-        Route::get('/{repo}/branches', [GitHubController::class, 'getBranches']);
+                // Retrieve Projects (for displaying in a view)
+                Route::get('/projects', [GithubController::class, 'showProjects']);
 
-        // Create a Branch Based on the Selected Branch
-        Route::post('/{repo}/branches', [GitHubController::class, 'createBranch']);
+                // Retrieve Branches from a Selected Repository (for displaying branches in a view)
+                Route::get('/{repo}/branches', [GithubController::class, 'showBranches']);
 
-        // Create a Fork from the Selected Repository
-        Route::post('/{repo}/fork', [GitHubController::class, 'createFork']);
+                // Retrieve Pull Requests (for displaying pull requests in a view)
+                Route::get('/{repo}/pulls', [GithubController::class, 'showPullRequests']);
 
-        // Check if a Fork Already Exists on the Developer’s Account
-        Route::get('/{repo}/fork/check', [GitHubController::class, 'checkForkExists']);
+                // Retrieve Pull Requests with filter the user and his original branch(for displaying pull requests in a view)
+                Route::get('/{repo}/{branch}/pulls', [GithubController::class, 'showPullRequests']);
 
-        // Retrieve Pull Requests, Filtering by Branch
-        Route::get('/{repo}/pull-requests', [GitHubController::class, 'getPullRequests']);
+                // Check if a Fork Already Exists (display fork status in a view)
+                Route::get('/{repo}/fork/check', [GithubController::class, 'showForkStatus']);
 
-        // Retrieve Commits from a Specific Pull Request
-        Route::get('/{repo}/pull-requests/{pr_id}/commits', [GitHubController::class, 'getCommits']);
+                // Retrieve Commits from a Specific Pull Request (for displaying commits of a PR)
+                Route::get('/{repo}/pull-requests/{pr_id}/commits', [GithubController::class, 'showCommits']);
+            });
+
+            // Show form to create a branch
+            Route::get('/{repo}/branches/create', [GithubController::class, 'showCreateBranchForm']);
+
+            // Create a Branch Based on the Selected Branch
+            Route::post('/{repo}/branches', [GithubController::class, 'createBranch']);
+
+            // Initiate a Fork (display fork status in a view)
+            Route::post('/{repo}/fork', [GithubController::class, 'createFork']);
+
+
+        });
     });
 });
