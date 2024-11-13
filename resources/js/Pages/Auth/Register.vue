@@ -47,6 +47,7 @@ defineOptions({
                     id="firstName"
                     size="large"
                     class="w-full !bg-surface-900 !px-8"
+                    autofocus
                 />
                 <label for="firstName">First Name</label>
             </FloatLabel>
@@ -75,6 +76,7 @@ defineOptions({
                 id="password"
                 size="large"
                 class="w-full !bg-surface-900 !px-8"
+                type="password"
             />
             <label for="password">Password</label>
         </FloatLabel>
