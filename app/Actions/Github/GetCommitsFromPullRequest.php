@@ -3,6 +3,7 @@
 namespace App\Actions\Github;
 
 use App\Http\Resources\CommitResource;
+use App\Models\UserGithubAccount;
 use Exception;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
@@ -18,7 +19,7 @@ class GetCommitsFromPullRequest
      */
     public function handle($owner, $repo, $pullNumber)
     {
-        $githubAccount = auth()->user()->githubAccount;
+        $githubAccount = UserGithubAccount::where('user_id',$owner)->first();
 
         $response = Http::withToken($githubAccount->github_token)
             ->get("https://api.github.com/repos/{$owner}/{$repo}/pulls/{$pullNumber}/commits");
