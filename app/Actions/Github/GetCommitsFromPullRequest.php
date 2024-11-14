@@ -18,7 +18,9 @@ class GetCommitsFromPullRequest
      */
     public function handle($owner, $repo, $pullNumber)
     {
-        $response = Http::withToken(auth()->user()->github_token)
+        $githubAccount = auth()->user()->githubAccount;
+
+        $response = Http::withToken($githubAccount->github_token)
             ->get("https://api.github.com/repos/{$owner}/{$repo}/pulls/{$pullNumber}/commits");
 
         if ($response->ok()) {
