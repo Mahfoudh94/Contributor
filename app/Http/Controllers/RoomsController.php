@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
-use Carbon\Carbon;
-use Carbon\Unit;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,8 +13,9 @@ class RoomsController extends Controller
      */
     public function index()
     {
-        $rooms = Room::paginate(10);
-        return Inertia::render('', [
+        $rooms = Room::with('tasks:id,room_id,status')
+            ->paginate(10);
+        return Inertia::render('Homepage', [
             'rooms' => $rooms
         ]);
     }
@@ -24,9 +23,9 @@ class RoomsController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
-        return Inertia::render('');
+        return Inertia::render('Rooms/Create');
     }
 
     /**
@@ -43,9 +42,11 @@ class RoomsController extends Controller
             'title' => $request->string('title'),
             'description' => $request->string('description'),
             'manager_id' => $request->user()->id,
-            'start_at' => $request->date('start_at')
+            'start_at' => $request->date('start_at',
+                tz: $request->header('X-Timezone')
+            ),
         ]);
-        return \Redirect::to('/');
+        return \Redirect::back()->with('success', 'Room created successfully.');
     }
 
     /**
@@ -53,8 +54,9 @@ class RoomsController extends Controller
      */
     public function show(string $id)
     {
-        return Inertia::render('', [
-            'room' => Room::findOrFail($id)
+        return Inertia::render('Rooms/Show', [
+            'room' => Room::with('tasks')
+                ->findOrFail($id)
         ]);
     }
 
@@ -80,7 +82,7 @@ class RoomsController extends Controller
                 'start_at' => $request->date('start_at')
             ])
         );
-        return \Redirect::to('/');
+        return \Redirect::back()->with('success', 'Room updated.');
     }
 
     /**
@@ -89,7 +91,7 @@ class RoomsController extends Controller
     public function destroy(string $id)
     {
         Room::find($id)->delete();
-        return \Redirect::to('/')
+        return \Redirect::route('Homepage')
             ->with([
                 'success' => 'deleted successfully'
             ]);

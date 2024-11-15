@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class TasksController extends Controller
@@ -37,13 +39,14 @@ class TasksController extends Controller
             'description' => 'sometimes|string',
             'start_at' => 'sometimes|date|after:now'
         ]);
-        Task::create([
-            'title' => $request->string('title'),
-            'description' => $request->string('description'),
-            'manager_id' => $request->user()->id,
-            'start_at' => $request->date('start_at')
-        ]);
-        return \Redirect::to('/');
+        Room::findOrFail($request->input('roomId'))
+            ->tasks()
+            ->create([
+                'title' => $request->string('title'),
+                'description' => $request->string('description'),
+                'start_at' => $request->date('start_at')
+            ]);
+        return \Redirect::back()->with('message', 'Task created.');
     }
 
     /**
@@ -71,14 +74,15 @@ class TasksController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Task::find($id)->fill(
-            array_filter([
-                'title' => $request->string('title'),
-                'description' => $request->string('description'),
-                'start_at' => $request->date('start_at')
-            ])
-        );
-        return \Redirect::to('/');
+        Task::findOr($id, fn () => Redirect::back()->with('error', 'Task not found.'))
+            ->update(
+                array_filter([
+                    'title' => $request->string('title'),
+                    'description' => $request->string('description'),
+                    'start_at' => $request->date('start_at')
+                ])
+            );
+        return \Redirect::back()->with('success', 'Task updated.');
     }
 
     /**
@@ -87,7 +91,7 @@ class TasksController extends Controller
     public function destroy(string $id)
     {
         Task::find($id)->delete();
-        return \Redirect::to('/')
+        return \Redirect::back()
             ->with([
                 'success' => 'deleted successfully'
             ]);
