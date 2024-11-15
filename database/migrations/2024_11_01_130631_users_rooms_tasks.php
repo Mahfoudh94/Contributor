@@ -18,7 +18,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
-            $table->foreignUuid('manager_id')->constrained('users');
+            $table->foreignId('manager_id')->constrained('users');
             $table->dateTime('start_at')->nullable();
             $table->timestamps();
         });
