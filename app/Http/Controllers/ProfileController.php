@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Room;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,6 +15,16 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+    public function show(string|null $username): Response
+    {
+        $user = $username ? User::where('username', $username)->firstOrFail() : Auth::user();
+        $ownRooms = Room::where('owner_id', $user->id)->get();
+        $rooms = Room::has('')->get();
+        return Inertia::render('Profile/Show', [
+            'ownRooms' => $ownRooms,
+            'rooms' => $rooms
+        ]);
+    }
     /**
      * Display the user's profile form.
      */

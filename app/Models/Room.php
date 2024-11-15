@@ -59,4 +59,9 @@ class Room extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    public function repository(): HasOne
+    {
+        return $this->hasOne(RoomRepo::class);
+    }
 }
