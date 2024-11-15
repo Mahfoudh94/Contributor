@@ -2,11 +2,43 @@
 import LocalDropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import LogoFull from '@images/LogoFull.svg';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import { useToast } from 'primevue/usetoast';
+import { watch } from 'vue';
+
+const toast = useToast();
+
+watch(
+    () => usePage().props.flash,
+    (flash, _) => {
+        if (flash.success)
+            toast.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: flash.success,
+                life: 3000,
+            });
+        if (flash.error)
+            toast.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: flash.error,
+                life: 3000,
+            });
+        if (flash.warning)
+            toast.add({
+                severity: 'warn',
+                summary: 'Notice',
+                detail: flash.warning,
+                life: 3000,
+            });
+});
 </script>
 
 <template>
-    <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50 overflow-y-hidden">
+    <div
+        class="overflow-y-hidden bg-gray-50 text-black/50 dark:bg-black dark:text-white/50"
+    >
         <div
             class="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
         >
@@ -91,7 +123,11 @@ import { Link } from '@inertiajs/vue3';
                                         v-else
                                     >
                                         <template #icon>
-                                            <Icon width="" height="" name="fa-user" />
+                                            <Icon
+                                                width=""
+                                                height=""
+                                                name="fa-user"
+                                            />
                                         </template>
                                     </Avatar>
                                 </template>
@@ -227,6 +263,7 @@ import { Link } from '@inertiajs/vue3';
             </div>
         </footer>
     </div>
+    <Toast position="bottom-center" />
 </template>
 
 <style scoped>

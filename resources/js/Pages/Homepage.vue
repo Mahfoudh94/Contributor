@@ -70,12 +70,14 @@ defineOptions({
             <RoomItem
                 v-for="room in rooms.data"
                 :key="room.id"
-                :id="room.id"
-                :title="room.title ?? 'it seems empty'"
-                :description="room.description ?? 'it seems empty'"
-                :tasks-count="room.tasks_count"
-                :starts-at="room.start_at!"
+                :room="room"
             />
+<!--                :id="room.id"-->
+<!--                :title="room.title ?? 'it seems empty'"-->
+<!--                :description="room.description ?? 'it seems empty'"-->
+<!--                :tasks-count="room.tasks_count"-->
+<!--                :starts-at="room.start_at!"-->
+<!--                :status="room.tasks?.reduce()"-->
             <div class="h-32"></div>
         </div>
     </template>
