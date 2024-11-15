@@ -84,15 +84,15 @@ defineOptions({
         <div
             class="flex flex-shrink-0 flex-row items-center justify-end gap-2 px-4"
         >
-            <Checkbox v-model="form.remember" />
+            <Checkbox v-model="form.remember" binary />
             <label class="me-auto">Remember me.</label>
             <Button size="large" type="submit"> Create account </Button>
             <Divider layout="vertical" pt:content:class="font-bold">
                 OR
             </Divider>
-            <Link :href="route('auth.github')">
+            <a :href="route('auth.github')">
                 <Button size="large" outlined> Sign in with GitHub </Button>
-            </Link>
+            </a>
         </div>
         <p class="w-full text-center">
             By creating an account, you agree to our

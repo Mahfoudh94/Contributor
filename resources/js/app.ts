@@ -11,6 +11,7 @@ import { addIcons, OhVueIcon } from "oh-vue-icons";
 import * as SiIcons from "oh-vue-icons/icons/si";
 import * as HiIcons from "oh-vue-icons/icons/hi";
 import * as FaIcons from "oh-vue-icons/icons/fa";
+import ToastService from 'primevue/toastservice'
 import { i18nVue } from "laravel-vue-i18n";
 import { definePreset } from "@primevue/themes";
 
@@ -54,6 +55,7 @@ createInertiaApp({
                     }),
                 },
             })
+            .use(ToastService)
             .use(ZiggyVue)
             .component('Icon', OhVueIcon)
             .mount(el);
