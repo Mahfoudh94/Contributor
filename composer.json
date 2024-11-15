@@ -12,7 +12,8 @@
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "lorisleiva/laravel-actions": "^2.8",
-        "tightenco/ziggy": "^2.0"
+        "tightenco/ziggy": "^2.0",
+        "spatie/laravel-medialibrary": "^11.9.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
