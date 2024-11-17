@@ -2,12 +2,17 @@
 
 namespace App\Actions\Github;
 
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Http;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class CreateBranch
 {
     use AsAction;
 
+    /**
+     * @throws ConnectionException
+     */
     public function handle(string $owner, string $repo, string $taskBranchName)
     {
         $githubAccount = auth()->user()->githubAccount;
