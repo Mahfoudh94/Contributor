@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CheckGitHubReadAccess;
+use App\Http\Middleware\CheckGitHubWriteAccess;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -20,7 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
         $middleware->alias([
-            'github.read' => CheckGitHubReadAccess::class
+            'github.read' => CheckGitHubReadAccess::class,
+            'github.write' => CheckGitHubWriteAccess::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
