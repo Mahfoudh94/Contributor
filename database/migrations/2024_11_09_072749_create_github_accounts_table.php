@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('git_hub_accounts');
+        Schema::dropIfExists('user_github_accounts');
     }
 };
