@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Tasks\DeleteTask;
 use App\Actions\Tasks\GetPaginatedTasks;
-use App\Models\Room;
+use App\Actions\Tasks\StoreTask;
+use App\Actions\Tasks\UpdateTask;
+use App\Http\Requests\Tasks\StoreTaskRequest;
+use App\Http\Requests\Tasks\UpdateTaskRequest;
 use App\Models\Task;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -24,7 +27,7 @@ class TasksController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
         return Inertia::render('');
     }
@@ -32,21 +35,10 @@ class TasksController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
-        $request->validate([
-            'title' => 'sometimes|string',
-            'description' => 'sometimes|string',
-            'start_at' => 'sometimes|date|after:now'
-        ]);
-        Room::findOrFail($request->input('roomId'))
-            ->tasks()
-            ->create([
-                'title' => $request->string('title'),
-                'description' => $request->string('description'),
-                'start_at' => $request->date('start_at')
-            ]);
-        return \Redirect::back()->with('message', 'Task created.');
+        StoreTask::run($request->validated());
+        return Redirect::back()->with('message', 'Task created.');
     }
 
     /**
@@ -72,17 +64,14 @@ class TasksController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateTaskRequest $request, string $id)
     {
-        Task::findOr($id, fn () => Redirect::back()->with('error', 'Task not found.'))
-            ->update(
-                array_filter([
-                    'title' => $request->string('title'),
-                    'description' => $request->string('description'),
-                    'start_at' => $request->date('start_at')
-                ])
-            );
-        return \Redirect::back()->with('success', 'Task updated.');
+        $task = Task::find($id);
+        if (!$task) {
+            return Redirect::back()->with('error', 'Task not found.');
+        }
+        UpdateTask::run($task, $request->validated());
+        return Redirect::back()->with('success', 'Task updated.');
     }
 
     /**
@@ -90,10 +79,13 @@ class TasksController extends Controller
      */
     public function destroy(string $id)
     {
-        Task::find($id)->delete();
-        return \Redirect::back()
-            ->with([
-                'success' => 'deleted successfully'
-            ]);
+        $task = Task::find($id);
+        if (!$task) {
+            return Redirect::back()->with('error', 'Task not found.');
+        }
+        DeleteTask::run($task);
+        return Redirect::back()->with([
+            'success' => 'deleted successfully'
+        ]);
     }
 }
