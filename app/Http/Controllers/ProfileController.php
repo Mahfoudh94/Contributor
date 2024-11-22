@@ -15,7 +15,7 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    public function show(string|null $username): Response
+    public function show(string $username = null): Response
     {
         $user = $username ? User::where('username', $username)->firstOrFail() : Auth::user();
         $ownRooms = Room::where('owner_id', $user->id)->get();
