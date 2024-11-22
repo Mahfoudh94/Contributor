@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Github\GetRepoBranches;
-use App\Actions\Github\GetReps;
+use App\Actions\Github\GetRepositories;
+use App\Actions\Rooms\GetPaginatedRooms;
+use App\Actions\Rooms\StoreRoom;
+use App\Http\Requests\Rooms\StoreRoomRequest;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use Redirect;
 
 class RoomsController extends Controller implements HasMiddleware
 {
@@ -25,12 +28,8 @@ class RoomsController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $rooms = Room::with(['tasks:id,room_id,status', 'manager:id,name'])
-            ->orderByDesc('start_at')
-            ->orderByDesc('updated_at')
-            ->paginate(10);
         return Inertia::render('Homepage', [
-            'rooms' => $rooms,
+            'rooms' => GetPaginatedRooms::run(),
             'GITHUB_REDIRECT_URL' => config('services.github.install_url')
         ]);
     }
@@ -42,37 +41,20 @@ class RoomsController extends Controller implements HasMiddleware
     {
         $repo_name = $request->query('repo', '');
         return Inertia::render('Rooms/Create', [
-            'repositories' => fn () => GetReps::run(),
-            'branches' => fn () => $repo_name ? GetRepoBranches::run($repo_name) : [] ,
+            'repositories' => fn() => GetRepositories::run(),
+            'branches' => fn() => $repo_name ? GetRepoBranches::run($repo_name) : [],
         ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store new Room.
      */
-    public function store(Request $request)
+    public function store(StoreRoomRequest $request)
     {
-        $request->validate([
-            'repository' => 'required',
-            'branch' => 'required',
-            'title' => 'sometimes|string',
-            'description' => 'sometimes|string',
-            'start_at' => 'sometimes|date|after:now'
-        ]);
-        $room = Room::create([
-            'title' => $request->string('title'),
-            'description' => $request->string('description'),
-            'manager_id' => $request->user()->id,
-            'start_at' => $request->date('start_at',
-                tz: $request->header('X-Timezone')
-            ),
-        ])->repository()->create([
-            'repository' => $request->input('repository'),
-            'branch' => $request->input('branch'),
-            'owner' => request()->user()->githubAccount->account_name
-        ]);
-        return Redirect::route('rooms.show', ['id' => $room->id])
-            ->with('success', 'Room created successfully.');
+        $room = StoreRoom::run($request->validated(), $request->header('X-Timezone'));
+        return Redirect::route('rooms.show', [
+            'id' => $room->id
+        ])->with('success', 'Room created successfully.');
     }
 
     /**
@@ -101,7 +83,11 @@ class RoomsController extends Controller implements HasMiddleware
      */
     public function update(Request $request, string $id)
     {
-        Room::find($id)->fill(
+        $room = Room::find($id);
+        if (!$room) {
+            return Redirect::back()->with('error', 'Task not found.');
+        }
+        $room->fill(
             array_filter([
                 'title' => $request->string('title'),
                 'description' => $request->string('description'),
@@ -116,9 +102,13 @@ class RoomsController extends Controller implements HasMiddleware
      */
     public function destroy(string $id)
     {
-        Room::find($id)->delete();
-        return Redirect::route('Homepage')
-            ->with([
+        $room = Room::find($id);
+        if (!$room) {
+            return Redirect::back()->with('error', 'Task not found.');
+        }
+
+        $room->delete();
+        return Redirect::route('Homepage')->with([
                 'success' => 'deleted successfully'
             ]);
     }
