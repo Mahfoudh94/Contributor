@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\User\UpdateUserGithubInstallationId;
 use App\Actions\User\auth\github\HandleGithubCallBack;
 use App\Actions\User\auth\github\RedirectToGithub;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Exception;
@@ -26,16 +26,15 @@ class SocialLoginController extends Controller
         }
     }
 
-    public function assignInstallId(Request $request)
+    public function handleGithubAppInstallCallback(Request $request)
     {
-        $installId = $request->query('installation_id');
+        $installation_id = $request->query('installation_id');
 
-        \Auth::user()->githubAccount()
-            ->update(['installation_id' => $installId]);
+        UpdateUserGithubInstallationId::run($installation_id);
 
         return response(<<<END
                 <script>window.close()</script>
                 END
-            )->header('content-type', 'text/html');
+        )->header('content-type', 'text/html');
     }
 }
