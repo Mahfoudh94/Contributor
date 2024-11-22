@@ -3,18 +3,19 @@
 namespace App\Actions\Tasks;
 
 use App\Models\Room;
+use Illuminate\Support\Carbon;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class StoreTask
 {
     use AsAction;
 
-    public function handle($data): void
+    public function handle(Room $room, $data): void
     {
-        Room::findOrFail($data['roomId'])->tasks()->create([
-                'title' => $data['title'],
-                'description' => $data['description'],
-                'start_at' => date($data['start_at'])
-            ]);
+        $room->tasks()->create([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'start_at' => Carbon::parse($data['start_at'])
+        ]);
     }
 }
