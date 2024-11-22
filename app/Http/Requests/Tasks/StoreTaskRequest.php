@@ -23,6 +23,7 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'roomID' => 'required|exists:rooms,id',
             'title' => 'sometimes|string',
             'description' => 'sometimes|string',
             'start_at' => 'sometimes|date|after:now'
