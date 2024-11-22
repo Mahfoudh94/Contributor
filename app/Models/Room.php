@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -63,5 +64,9 @@ class Room extends Model
     public function repository(): HasOne
     {
         return $this->hasOne(RoomRepo::class);
+    }
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'room_user');
     }
 }
