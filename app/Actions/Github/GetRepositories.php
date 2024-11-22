@@ -4,17 +4,18 @@ namespace App\Actions\Github;
 
 use App\Http\Resources\RepoResource;
 use Exception;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Http;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class GetReps
+class GetRepositories
 {
     use AsAction;
 
     /**
      * @throws Exception
      */
-    public function handle()
+    public function handle(): AnonymousResourceCollection
     {
         $githubAccount = auth()->user()->githubAccount;
 
