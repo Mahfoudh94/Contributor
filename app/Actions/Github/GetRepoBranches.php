@@ -5,6 +5,7 @@ namespace App\Actions\Github;
 use App\Http\Resources\RepoBranchesResource;
 use Exception;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Support\Facades\Http;
 
@@ -16,8 +17,12 @@ class GetRepoBranches
      * @throws ConnectionException
      * @throws Exception
      */
-    public function handle(string $repo)
+    public function handle(string $repo = null): AnonymousResourceCollection
     {
+        if (!$repo) {
+            return RepoBranchesResource::collection([]);
+        }
+
         $githubAccount = auth()->user()->githubAccount;
 
         $response = Http::withToken($githubAccount->github_token)
