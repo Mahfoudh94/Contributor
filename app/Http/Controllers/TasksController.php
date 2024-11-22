@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Tasks\GetPaginatedTasks;
 use App\Models\Room;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -15,9 +16,8 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $tasks = Task::paginate(10);
         return Inertia::render('', [
-            'tasks' => $tasks
+            'tasks' => GetPaginatedTasks::run()
         ]);
     }
 
