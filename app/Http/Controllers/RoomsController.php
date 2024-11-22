@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Actions\Github\GetRepoBranches;
 use App\Actions\Github\GetRepositories;
+use App\Actions\Rooms\DeleteRoom;
 use App\Actions\Rooms\GetPaginatedRooms;
 use App\Actions\Rooms\StoreRoom;
+use App\Actions\Rooms\UpdateRoom;
 use App\Http\Requests\Rooms\StoreRoomRequest;
+use App\Http\Requests\Rooms\UpdateRoomRequest;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -42,7 +45,7 @@ class RoomsController extends Controller implements HasMiddleware
         $repo_name = $request->query('repo', '');
         return Inertia::render('Rooms/Create', [
             'repositories' => fn() => GetRepositories::run(),
-            'branches' => fn() => $repo_name ? GetRepoBranches::run($repo_name) : [],
+            'branches' => fn() => GetRepoBranches::run($repo_name),
         ]);
     }
 
@@ -62,9 +65,13 @@ class RoomsController extends Controller implements HasMiddleware
      */
     public function show(string $id)
     {
+        $room = Room::find($id);
+        if (!$room) {
+            return Redirect::back()->with('error', 'Room not found.');
+        }
+        $room->load('tasks');
         return Inertia::render('Rooms/Show', [
-            'room' => Room::with('tasks')
-                ->findOrFail($id)
+            'room' => $room
         ]);
     }
 
@@ -73,27 +80,26 @@ class RoomsController extends Controller implements HasMiddleware
      */
     public function edit(string $id)
     {
+        $room = Room::find($id);
+        if (!$room) {
+            return Redirect::back()->with('error', 'Room not found.');
+        }
+
         return Inertia::render('', [
-            'room' => Room::findOrFail($id)
+            'room' => $room
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRoomRequest $request, string $id)
     {
         $room = Room::find($id);
         if (!$room) {
-            return Redirect::back()->with('error', 'Task not found.');
+            return Redirect::back()->with('error', 'Room not found.');
         }
-        $room->fill(
-            array_filter([
-                'title' => $request->string('title'),
-                'description' => $request->string('description'),
-                'start_at' => $request->date('start_at')
-            ])
-        );
+        UpdateRoom::run($room, $request->validated());
         return Redirect::back()->with('success', 'Room updated.');
     }
 
@@ -104,12 +110,11 @@ class RoomsController extends Controller implements HasMiddleware
     {
         $room = Room::find($id);
         if (!$room) {
-            return Redirect::back()->with('error', 'Task not found.');
+            return Redirect::back()->with('error', 'Room not found.');
         }
-
-        $room->delete();
+        DeleteRoom::run($room);
         return Redirect::route('Homepage')->with([
-                'success' => 'deleted successfully'
-            ]);
+            'success' => 'deleted successfully'
+        ]);
     }
 }
