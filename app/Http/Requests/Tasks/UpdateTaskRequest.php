@@ -25,7 +25,7 @@ class UpdateTaskRequest extends FormRequest
         return [
             'title' => 'sometimes|string|max:255',
             'description' => 'sometimes|nullable|string',
-            'start_at' => 'sometimes|date|after_or_equal:today',
+            'start_at' => 'sometimes|date|after:now',
         ];
     }
 }
