@@ -2,12 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use App\Actions\User\auth\github\RedirectToGithubInstall;
 use Closure;
+use Exception;
+use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckGitHubWriteAccess
@@ -30,7 +32,7 @@ class CheckGitHubWriteAccess
         $user = Auth::user();
 
         if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], 400);
         }
 
         $githubAccount = $user->githubAccount;
@@ -41,12 +43,8 @@ class CheckGitHubWriteAccess
 
             if (!$installationId) {
                 // Redirect the user to install the GitHub App if not installed
-                return Socialite::driver('github')
-                    ->scopes(['read:user', 'write:repo'])
-                    ->redirectUrl(config('services.github.install_url'))
-                    ->redirect();
+                return RedirectToGithubInstall::run();
             }
-
             // Save the retrieved installation_id to the user's account
             $githubAccount->installation_id = $installationId;
             $githubAccount->save();
@@ -55,7 +53,7 @@ class CheckGitHubWriteAccess
         // Retrieve a new installation token based on the installation_id
         $installationToken = $this->getInstallationToken($githubAccount->installation_id);
         if (!$installationToken) {
-            return response()->json(['error' => 'Could not obtain GitHub installation token'], 401);
+            return response()->json(['error' => 'Could not obtain GitHub installation token'], 400);
         }
 
         // Attach the valid token to the request for use in controllers
@@ -94,7 +92,7 @@ class CheckGitHubWriteAccess
             }
 
             return null;
-        } catch (\Exception $e) {
+        } catch (Exception) {
             return null;
         }
     }
@@ -119,7 +117,7 @@ class CheckGitHubWriteAccess
             $data = json_decode($response->getBody(), true);
 
             return $data['token'] ?? null;
-        } catch (\Exception $e) {
+        } catch (Exception) {
             return null;
         }
     }
@@ -129,13 +127,13 @@ class CheckGitHubWriteAccess
      */
     protected function generateJWT(): string
     {
-        $privateKey = file_get_contents(storage_path('app/github-app.pem'));
+        $privateKey = file_get_contents(storage_path('github-app.pem'));
         $payload = [
             'iat' => time(),
             'exp' => time() + (10 * 60),
             'iss' => config('services.github.app_id'),
         ];
 
-        return \Firebase\JWT\JWT::encode($payload, $privateKey, 'RS256');
+        return JWT::encode($payload, $privateKey, 'RS256');
     }
 }
