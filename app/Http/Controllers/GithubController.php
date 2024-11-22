@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Github\GetCommitsFromPullRequest;
-use App\Actions\Github\GetReps;
+use App\Actions\Github\GetRepositories;
 use App\Actions\Github\GetRepoBranches;
 use App\Actions\Github\GetRepoPullRequests;
 use App\Http\Requests\GetCommitsRequest;
@@ -16,7 +16,7 @@ class GithubController extends Controller
     public function showProjects()
     {
         try {
-            return GetReps::run();
+            return GetRepositories::run();
         } catch (Exception) {
             return response()->json([
                 'status' => false,
