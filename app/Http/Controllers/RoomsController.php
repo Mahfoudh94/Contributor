@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
+use Redirect;
 
 class RoomsController extends Controller implements HasMiddleware
 {
@@ -70,7 +71,7 @@ class RoomsController extends Controller implements HasMiddleware
             'branch' => $request->input('branch'),
             'owner' => request()->user()->githubAccount->account_name
         ]);
-        return \Redirect::route('rooms.show', ['id' => $room->id])
+        return Redirect::route('rooms.show', ['id' => $room->id])
             ->with('success', 'Room created successfully.');
     }
 
@@ -107,7 +108,7 @@ class RoomsController extends Controller implements HasMiddleware
                 'start_at' => $request->date('start_at')
             ])
         );
-        return \Redirect::back()->with('success', 'Room updated.');
+        return Redirect::back()->with('success', 'Room updated.');
     }
 
     /**
@@ -116,7 +117,7 @@ class RoomsController extends Controller implements HasMiddleware
     public function destroy(string $id)
     {
         Room::find($id)->delete();
-        return \Redirect::route('Homepage')
+        return Redirect::route('Homepage')
             ->with([
                 'success' => 'deleted successfully'
             ]);
