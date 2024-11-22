@@ -11,7 +11,6 @@ const props = defineProps<{
     // tasksCount: number;
     // title?: string;
     // description?: string;
-    imageSrc?: string;
     canJoin?: {
         type: Boolean;
         default: false;
@@ -83,8 +82,8 @@ const roomStatusColorizer = {
                 ref="imageParent"
             >
                 <img
-                    class="h-full w-full rounded-full bg-black object-fill"
-                    :src="$props.imageSrc"
+                    class="h-full w-full rounded-full bg-black object-cover"
+                    :src="$props.room.manager?.profile_picture_url"
                     alt=" "
                 />
             </div>

@@ -61,3 +61,4 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/auth/github', [SocialLoginController::class, 'redirectToGithub'])->name('auth.github');
 Route::get('/auth/github/callback', [SocialLoginController::class, 'handleGithubCallback']);
+Route::get('/auth/github/app/install/callback', [SocialLoginController::class, 'assignInstallId']);

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GithubButton from '@/Components/GithubButton.vue';
 import RoomItem from '@/Components/RoomItem.vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { Room } from '@/types/model';
@@ -60,33 +61,41 @@ defineOptions({
         <div class="h-32"></div>
         <div class="mb-4 flex w-full flex-row justify-between">
             <h1 class="text-4xl">Rooms</h1>
-            <Link :href="route('rooms.create')">
-                <Button>Create a room</Button>
-            </Link>
+            <span class="flex flex-row gap-4">
+                <Link
+                    :href="route('rooms.create')"
+                    :disabled="
+                        !$page.props.auth.user!.github_account?.installation_id
+                    "
+                >
+                    <Button :disabled="!$page.props.auth.user!.github_account?.installation_id">
+                        Create a room
+                    </Button>
+                </Link>
+                <GithubButton
+                    v-if="!$page.props.auth.user!.github_account?.installation_id"
+                />
+            </span>
         </div>
         <div
             class="grid w-full grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2 xl:grid-cols-3"
         >
-            <RoomItem
-                v-for="room in rooms.data"
-                :key="room.id"
-                :room="room"
-            />
-<!--                :id="room.id"-->
-<!--                :title="room.title ?? 'it seems empty'"-->
-<!--                :description="room.description ?? 'it seems empty'"-->
-<!--                :tasks-count="room.tasks_count"-->
-<!--                :starts-at="room.start_at!"-->
-<!--                :status="room.tasks?.reduce()"-->
+            <RoomItem v-for="room in rooms.data" :key="room.id" :room="room" />
+            <!--                :id="room.id"-->
+            <!--                :title="room.title ?? 'it seems empty'"-->
+            <!--                :description="room.description ?? 'it seems empty'"-->
+            <!--                :tasks-count="room.tasks_count"-->
+            <!--                :starts-at="room.start_at!"-->
+            <!--                :status="room.tasks?.reduce()"-->
             <div class="h-32"></div>
         </div>
     </template>
     <template v-else>
         <div class="relative flex flex-col items-center">
-            <h1 class="my-1 text-clip text-5xl font-medium text-white z-10">
+            <h1 class="z-10 my-1 text-clip text-5xl font-medium text-white">
                 Juvdashavnothinpeelleskafbadudachechigaw
             </h1>
-            <h1 class="my-1 text-clip text-4xl font-medium text-white z-10">
+            <h1 class="z-10 my-1 text-clip text-4xl font-medium text-white">
                 Astauxtekalonshamilupvevuvenivanovafle
             </h1>
             <img
@@ -171,7 +180,9 @@ defineOptions({
                 </div>
             </div>
             <div class="h-12"></div>
-            <h4 class="my-4 text-2xl font-medium text-white justify-self-center text-center">
+            <h4
+                class="my-4 justify-self-center text-center text-2xl font-medium text-white"
+            >
                 There is no (enough) responses to show testimonials
             </h4>
         </section>

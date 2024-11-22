@@ -39,5 +39,6 @@ return [
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
         'redirect' => env('GITHUB_REDIRECT'),
         'redirect_api' => env('GITHUB_REDIRECT_API'),
+        'install_url' => env('GITHUB_APP_INSTALLATION'),
         ]
 ];
