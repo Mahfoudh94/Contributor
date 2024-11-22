@@ -8,6 +8,7 @@ use App\Actions\Tasks\StoreTask;
 use App\Actions\Tasks\UpdateTask;
 use App\Http\Requests\Tasks\StoreTaskRequest;
 use App\Http\Requests\Tasks\UpdateTaskRequest;
+use App\Models\Room;
 use App\Models\Task;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -37,7 +38,15 @@ class TasksController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        StoreTask::run($request->validated());
+        $validatedData = $request->validated();
+
+        $room = Room::find($validatedData['roomID']);
+
+        if (!$room) {
+            return Redirect::back()->with('error', 'Room not found.');
+        }
+
+        StoreTask::run($room, $validatedData);
         return Redirect::back()->with('message', 'Task created.');
     }
 
@@ -46,8 +55,12 @@ class TasksController extends Controller
      */
     public function show(string $id)
     {
+        $task = Task::find($id);
+        if (!$task) {
+            return Redirect::back()->with('error', 'Task not found.');
+        }
         return Inertia::render('', [
-            'task' => Task::findOrFail($id)
+            'task' => $task
         ]);
     }
 
@@ -56,8 +69,12 @@ class TasksController extends Controller
      */
     public function edit(string $id)
     {
+        $task = Task::find($id);
+        if (!$task) {
+            return Redirect::back()->with('error', 'Task not found.');
+        }
         return Inertia::render('', [
-            'task' => Task::findOrFail($id)
+            'task' => $task
         ]);
     }
 
