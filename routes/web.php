@@ -4,22 +4,43 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\GithubController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [RoomsController::class, 'index'])->name('Homepage');
-Route::resource('rooms', RoomsController::class)->except(['index']);
-Route::resource('tasks', TasksController::class);
+
+Route::get('tasks/{task}', [TasksController::class, 'show'])->name('tasks.show');
+Route::get('tasks', [TasksController::class, 'index'])->name('tasks.index');
+
+Route::get('rooms/{room}', [RoomsController::class, 'show'])->name('rooms.show');
+Route::get('rooms', [RoomsController::class, 'index'])->name('rooms.index');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::prefix('rooms')->group(function () {
+
+        Route::post('', [RoomsController::class, 'store'])->name('rooms.store');
+        Route::get('rooms/create', [RoomsController::class, 'create'])->name('rooms.create');
+        Route::get('rooms/{room}/edit', [RoomsController::class, 'edit'])->name('rooms.edit');
+        Route::put('rooms/{room}', [RoomsController::class, 'update'])->name('rooms.update');
+        Route::delete('rooms/{room}', [RoomsController::class, 'destroy'])->name('rooms.destroy');
+    });
+
+    Route::prefix('tasks')->group(function () {
+        Route::post('', [TasksController::class, 'store'])->name('tasks.store');
+        Route::get('tasks/create', [TasksController::class, 'create'])->name('tasks.create');
+        Route::get('tasks/{task}/edit', [TasksController::class, 'edit'])->name('tasks.edit');
+        Route::put('tasks/{task}', [TasksController::class, 'update'])->name('tasks.update');
+        Route::delete('tasks/{task}', [TasksController::class, 'destroy'])->name('tasks.destroy');
+    });
 
     Route::prefix('github')->group(function () {
         Route::middleware('github.read')->group(function (){
