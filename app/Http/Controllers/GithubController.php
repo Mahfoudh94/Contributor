@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Github\GetCommitsFromPullRequest;
-use App\Actions\Github\GetRepositories;
-use App\Actions\Github\GetRepoBranches;
 use App\Actions\Github\GetRepoPullRequests;
 use App\Http\Requests\GetCommitsRequest;
 use App\Http\Requests\RepoPRRequest;
+use App\Actions\Github\GetRepositories;
+use App\Actions\Github\GetRepoBranches;
 use Mockery\Exception;
 
 class GithubController extends Controller
@@ -16,7 +16,10 @@ class GithubController extends Controller
     public function showProjects()
     {
         try {
-            return GetRepositories::run();
+            return response()->json([
+                'status' => true,
+                'data' => GetRepositories::run()
+            ]);
         } catch (Exception) {
             return response()->json([
                 'status' => false,
@@ -29,7 +32,10 @@ class GithubController extends Controller
     public function showBranches(string $repo)
     {
         try {
-            return GetRepoBranches::run($repo);
+            return response()->json([
+                'status' => true,
+                'data' => GetRepoBranches::run($repo)
+            ]);
         } catch (Exception) {
             return response()->json([
                 'status' => false,
@@ -38,7 +44,7 @@ class GithubController extends Controller
         }
     }
 
-    public function showPullRequests(string $repo, RepoPRRequest $request ,string $branch = null)
+    /*public function showPullRequests(string $repo, RepoPRRequest $request ,string $branch = null)
     {
         try {
             return GetRepoPullRequests::run($repo, $request->input('owner_id'),$branch);
@@ -59,6 +65,6 @@ class GithubController extends Controller
                 'message' => 'problem getting info from this repo'
             ], 400);
         }
-    }
+    }*/
 }
 
