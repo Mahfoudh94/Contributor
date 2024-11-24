@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Actions\Tasks\DeleteTask;
 use App\Actions\Tasks\GetPaginatedTasks;
+use App\Actions\Tasks\StartTask;
 use App\Actions\Tasks\StoreTask;
 use App\Actions\Tasks\UpdateTask;
 use App\Http\Requests\Tasks\StoreTaskRequest;
 use App\Http\Requests\Tasks\UpdateTaskRequest;
 use App\Models\Room;
 use App\Models\Task;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -103,6 +105,27 @@ class TasksController extends Controller
         DeleteTask::run($task);
         return Redirect::back()->with([
             'success' => 'deleted successfully'
+        ]);
+    }
+
+    /**
+     * Start the task manually.
+     */
+    public function start(Request $request, string $id)
+    {
+        $githubPrivateToken = $request->attributes->get('github_private_token');
+
+        $task = Task::find($id);
+
+        if (!$task) {
+            return Redirect::back()->with('error', 'Task not found.');
+        }
+
+        // Invoke the action to start the task
+        StartTask::run($task, $githubPrivateToken);
+
+        return response()->json([
+            'success' => 'Task started successfully.'
         ]);
     }
 }
