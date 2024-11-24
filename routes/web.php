@@ -39,18 +39,27 @@ Route::middleware('auth')->group(function () {
         Route::get('tasks/create', [TasksController::class, 'create'])->name('tasks.create');
         Route::get('tasks/{task}/edit', [TasksController::class, 'edit'])->name('tasks.edit');
         Route::put('tasks/{task}', [TasksController::class, 'update'])->name('tasks.update');
+
+        Route::patch('tasks/{task}/start', [TasksController::class, 'start'])
+            ->middleware('github.write')
+            ->name('tasks.start');
+
         Route::delete('tasks/{task}', [TasksController::class, 'destroy'])->name('tasks.destroy');
     });
 
     Route::prefix('github')->group(function () {
+
+        Route::get('/terms', fn () => "nothing for now")->name('_tos');
+
         Route::middleware('github.read')->group(function (){
 
-            // Retrieve Projects (for displaying in a view)
-            Route::get('/projects', [GithubController::class, 'showProjects']);
+            // Retrieve Github Repertoires
+            Route::get('/repertoires', [GithubController::class, 'showProjects']);
 
-            // Retrieve Branches from a Selected Repository (for displaying branches in a view)
+            // Retrieve Branches from a Selected Repository
             Route::get('/{repo}/branches', [GithubController::class, 'showBranches']);
 
+            /*
             // Retrieve Pull Requests (for displaying pull requests in a view)
             Route::get('/{repo}/pulls', [GithubController::class, 'showPullRequests']);
 
@@ -62,18 +71,17 @@ Route::middleware('auth')->group(function () {
 
             // Retrieve Commits from a Specific Pull Request (for displaying commits of a PR)
             Route::get('/{repo}/pull-requests/{pr_id}/commits', [GithubController::class, 'showCommits']);
+            */
         });
 
-        // Show form to create a branch
+        /*// Show form to create a branch
         Route::get('/{repo}/branches/create', [GithubController::class, 'showCreateBranchForm']);
 
         // Create a Branch Based on the Selected Branch
         Route::post('/{repo}/branches', [GithubController::class, 'createBranch']);
 
         // Initiate a Fork (display fork status in a view)
-        Route::post('/{repo}/fork', [GithubController::class, 'createFork']);
-
-        Route::get('/terms', fn () => "nothing for now")->name('_tos');
+        Route::post('/{repo}/fork', [GithubController::class, 'createFork']);*/
 
     });
 });
