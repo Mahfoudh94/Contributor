@@ -10,14 +10,20 @@ class CreateFork
 {
     use AsAction;
 
+
     /**
+     * @param string $githubUsername
+     * @param string $repoName
+     * @param string $githubPrivateToken
+     * @return array
      * @throws ConnectionException
      */
-    public function handle(string $owner, string $repo): array
+    public function handle(string $githubUsername, string $repoName, string $githubPrivateToken): array
     {
-        $githubAccount = auth()->user()->githubAccount;
-        $response = Http::withToken($githubAccount->github_token)
-            ->post("https://api.github.com/repos/{$owner}/{$repo}/forks");
+        $response = Http::withToken($githubPrivateToken)
+            ->post("https://api.github.com/repos/$githubUsername/$repoName/forks",[
+                'default_branch_only' => true,
+            ]);
 
         return $response->json();
     }
