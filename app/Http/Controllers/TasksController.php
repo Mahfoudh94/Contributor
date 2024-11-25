@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Tasks\DeleteTask;
 use App\Actions\Tasks\GetPaginatedTasks;
+use App\Actions\Tasks\JoinTask;
 use App\Actions\Tasks\StartTask;
 use App\Actions\Tasks\StoreTask;
 use App\Actions\Tasks\UpdateTask;
@@ -126,6 +127,27 @@ class TasksController extends Controller
 
         return response()->json([
             'success' => 'Task started successfully.'
+        ]);
+    }
+
+    /**
+     * Join the task manually.
+     */
+    public function joinTask(Request $request, string $id)
+    {
+        $githubPrivateToken = $request->attributes->get('github_private_token');
+
+        $task = Task::find($id);
+
+        if (!$task) {
+            return Redirect::back()->with('error', 'Task not found.');
+        }
+
+        // Invoke the action to start the task
+        JoinTask::run($task, auth()->user(), $githubPrivateToken);
+
+        return response()->json([
+            'success' => 'Task Joined successfully.'
         ]);
     }
 }
