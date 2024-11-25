@@ -11,7 +11,7 @@ class GenerateGithubJWT
 
     public function handle(): string
     {
-        $privateKey = file_get_contents(storage_path('github-app.pem'));
+        $privateKey = file_get_contents(storage_path('contributor.pem'));
         $payload = [
             'iat' => time(),
             'exp' => time() + (10 * 60),
