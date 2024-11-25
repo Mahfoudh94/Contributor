@@ -10,7 +10,12 @@ class JoinRoom
 {
     use AsAction;
 
-    public function handle(Room $room, User $user)
+    /**
+     * @param Room $room
+     * @param User $user
+     * @return Room
+     */
+    public function handle(Room $room, User $user): Room
     {
         if (!$room->users->contains($user)) {
             $room->users()->attach($user);
