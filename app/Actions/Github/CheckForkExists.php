@@ -10,15 +10,18 @@ class CheckForkExists
 {
     use AsAction;
 
+
     /**
+     * @param string $githubUsername
+     * @param string $repoName
+     * @param string $githubPublicToken
+     * @return bool
      * @throws ConnectionException
      */
-    public function handle(string $developer, string $repo): bool
+    public function handle(string $githubUsername, string $repoName, string $githubPublicToken): bool
     {
-        $githubAccount = auth()->user()->githubAccount;
-
-        $response = Http::withToken($githubAccount->github_token)
-            ->get("https://api.github.com/repos/{$developer}/{$repo}");
+        $response = Http::withToken($githubPublicToken)
+            ->get("https://api.github.com/repos/$githubUsername/$repoName");
 
         return $response->successful();
     }
