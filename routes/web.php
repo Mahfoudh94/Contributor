@@ -28,23 +28,27 @@ Route::middleware('auth')->group(function () {
     Route::prefix('rooms')->group(function () {
 
         Route::post('', [RoomsController::class, 'store'])->name('rooms.store');
-        Route::get('rooms/create', [RoomsController::class, 'create'])->name('rooms.create');
-        Route::get('rooms/{room}/edit', [RoomsController::class, 'edit'])->name('rooms.edit');
-        Route::put('rooms/{room}', [RoomsController::class, 'update'])->name('rooms.update');
-        Route::delete('rooms/{room}', [RoomsController::class, 'destroy'])->name('rooms.destroy');
+        Route::get('/create', [RoomsController::class, 'create'])->name('rooms.create');
+        Route::get('/{room}/edit', [RoomsController::class, 'edit'])->name('rooms.edit');
+        Route::put('/{room}', [RoomsController::class, 'update'])->name('rooms.update');
+        Route::delete('/{room}', [RoomsController::class, 'destroy'])->name('rooms.destroy');
     });
 
     Route::prefix('tasks')->group(function () {
         Route::post('', [TasksController::class, 'store'])->name('tasks.store');
-        Route::get('tasks/create', [TasksController::class, 'create'])->name('tasks.create');
-        Route::get('tasks/{task}/edit', [TasksController::class, 'edit'])->name('tasks.edit');
-        Route::put('tasks/{task}', [TasksController::class, 'update'])->name('tasks.update');
+        Route::get('/create', [TasksController::class, 'create'])->name('tasks.create');
+        Route::get('/{task}/edit', [TasksController::class, 'edit'])->name('tasks.edit');
+        Route::put('/{task}', [TasksController::class, 'update'])->name('tasks.update');
 
-        Route::patch('tasks/{task}/start', [TasksController::class, 'start'])
+        Route::patch('/{task}/start', [TasksController::class, 'start'])
             ->middleware('github.write')
             ->name('tasks.start');
 
-        Route::delete('tasks/{task}', [TasksController::class, 'destroy'])->name('tasks.destroy');
+        Route::post('/{task}/join', [TasksController::class, 'joinTask'])
+            ->middleware('github.write')
+            ->name('tasks.join');
+
+        Route::delete('/{task}', [TasksController::class, 'destroy'])->name('tasks.destroy');
     });
 
     Route::prefix('github')->group(function () {
