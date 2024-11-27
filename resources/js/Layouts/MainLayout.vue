@@ -112,9 +112,10 @@ watch(
                                 <template #trigger>
                                     <Avatar
                                         size="large"
-                                        :image="$page.props.auth.user.avatarUrl"
-                                        v-if="$page.props.auth.user.avatarUrl"
-                                        class="hover:saturation-75 hover:brightness-120 transition-all duration-200 hover:scale-110"
+                                        shape="circle"
+                                        :image="$page.props.auth.user.profile_picture_url"
+                                        v-if="$page.props.auth.user.profile_picture_url"
+                                        class="hover:saturation-75 hover:brightness-120 transition-all duration-200 hover:scale-110 *:object-cover"
                                     />
                                     <Avatar
                                         shape="circle"
@@ -132,7 +133,7 @@ watch(
                                     </Avatar>
                                 </template>
                                 <template #content>
-                                    <DropdownLink :href="route('profile.edit')">
+                                    <DropdownLink :href="route('profile.me')">
                                         Profile
                                     </DropdownLink>
                                     <DropdownLink

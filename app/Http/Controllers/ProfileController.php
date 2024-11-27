@@ -10,17 +10,35 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    public function show(string $username = null): Response
+    public function show(?string $username = null): Response
     {
-        $user = $username ? User::where('username', $username)->firstOrFail() : Auth::user();
+        $user = null;
+        if ($username == null)
+            $user = Auth::user();
+        else
+            if (Str::startsWith($username, '@'))
+                $user = User::where('username', $username)->first();
+            else
+                $user = User::where('id', $username)->first();
+
+        if (!$user) abort(404);
+
+        $isMe = $user->id == Auth::id();
         $ownRooms = Room::where('owner_id', $user->id)->get();
-        $rooms = Room::has('')->get();
+        $rooms = Room::where('owner_id', '<>', $user->id)
+            ->whereDoesntHave('users', function ($query) use ($user) {
+                $query->where('id', $user->id);
+            })
+            ->get();
         return Inertia::render('Profile/Show', [
+            'isMe' => $isMe,
+            'profile' => $user,
             'ownRooms' => $ownRooms,
             'rooms' => $rooms
         ]);

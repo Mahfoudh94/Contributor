@@ -16,22 +16,22 @@ class BadgeSeeder extends Seeder
         $badges = [
             [
                 'title' => 'Contributor',
-                'icon' => 'icons/contributor.png',
+                'icon' => 'contributors-badge',
                 'description' => 'Awarded for contributing to the project.',
             ],
             [
                 'title' => 'Early Adopter',
-                'icon' => 'icons/early_adopter.png',
+                'icon' => 'contributors-badge',
                 'description' => 'Awarded to the first users of the platform.',
             ],
             [
                 'title' => 'Top Performer',
-                'icon' => 'icons/top_performer.png',
+                'icon' => 'contributors-badge',
                 'description' => 'Awarded for outstanding performance.',
             ],
             [
                 'title' => 'Team Player',
-                'icon' => 'icons/team_player.png',
+                'icon' => 'contributors-badge',
                 'description' => 'Awarded for exceptional collaboration.',
             ],
         ];

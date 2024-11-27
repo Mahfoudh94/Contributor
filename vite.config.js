@@ -3,7 +3,7 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import Components from "unplugin-vue-components/vite";
 import { PrimeVueResolver } from "@primevue/auto-import-resolver";
-import DefineOption from 'unplugin-vue-define-options/vite'
+import DefineOption from 'unplugin-vue-define-options/vite';
 
 export default defineConfig({
     plugins: [
@@ -30,7 +30,7 @@ export default defineConfig({
         },
     },
     optimizeDeps: {
-        exclude: ['oh-vue-icons'],
+        exclude: ['oh-vue-icons/icons'],
     },
     server: {
         watch: {
