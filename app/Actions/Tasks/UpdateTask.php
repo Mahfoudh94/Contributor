@@ -15,7 +15,8 @@ class UpdateTask
         $task->fill(array_filter([
             'title' => $data['title'],
             'description' => $data['description'],
-            'start_at' => Carbon::parse($data['start_at'])
+            'start_at' => isset($data['start_at']) ? Carbon::parse($data['start_at']) : Carbon::now(),
         ]));
+        $task->save();
     }
 }

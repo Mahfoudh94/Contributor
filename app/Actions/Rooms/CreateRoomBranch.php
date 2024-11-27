@@ -22,11 +22,11 @@ class CreateRoomBranch
         $roomRepo = $task->room->repository;
 
         // First, get the SHA of the base branch
-        $sha = GetBranchSha::run($roomRepo->owner, $roomRepo->repository, $roomRepo->branch, $githubPrivateToken);
+        $sha = GetBranchSha::run($roomRepo->owner, $roomRepo->repository, \Str::slug($roomRepo->branch), $githubPrivateToken);
 
         // Create the new branch based on the Room base branch's SHA
-        $response = CreateBranch::run($roomRepo->owner, $roomRepo->repository, $task->title, $githubPrivateToken, $sha);
+        $response = CreateBranch::run($roomRepo->owner, $roomRepo->repository, \Str::slug($task->title), $githubPrivateToken, $sha);
 
-        return $response->json();
+        return is_array($response) ? $response : $response->json();
     }
 }

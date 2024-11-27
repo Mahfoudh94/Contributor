@@ -24,9 +24,9 @@ class CreateTaskBranch
     public function handle(string $githubUsername, RoomRepo $roomRepo, string $branchName, string $githubPrivateToken): mixed
     {
         // First, get the SHA of the base branch
-        $sha = GetBranchSha::run($roomRepo->owner, $roomRepo->repository, $branchName, $githubPrivateToken);
+        $sha = GetBranchSha::run($roomRepo->owner, $roomRepo->repository, \Str::slug($branchName), $githubPrivateToken);
 
         // Create the new branch based on the task base branch's SHA
-        return CreateBranch::run($githubUsername, $roomRepo->repository, $branchName, $githubPrivateToken, $sha);
+        return CreateBranch::run($githubUsername, $roomRepo->repository, \Str::slug($branchName), $githubPrivateToken, $sha);
     }
 }
