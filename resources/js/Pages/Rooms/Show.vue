@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import TimeCounter from '@/Components/TimeCounter.vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import CreateTask from '@/Pages/Rooms/CreateTask.vue';
-import { Room, TaskStatusEnum } from '@/types/model';
-import { provide, ref } from "vue";
-import EditTask from "@/Pages/Rooms/EditTask.vue";
+import EditTask from '@/Pages/Rooms/EditTask.vue';
+import { Room, Task, TaskStatusEnum } from '@/types/model';
+import { router } from '@inertiajs/vue3';
+import { provide, ref } from 'vue';
 const createTaskRef = ref();
 const editTaskRef = ref();
 const editableTask = ref({});
@@ -20,6 +22,17 @@ provide('roomId', props.room.id);
 const openCreateTaskDialog = () => createTaskRef.value!.openModal();
 const openEditTaskDialog = () => editTaskRef.value!.openModal();
 
+const startTaskServerCall = (taskId: string) => {
+    router.patch(route('tasks.start', { task: taskId }), undefined, {
+        only: [],
+    });
+};
+const joinTaskServerCall = (taskId: string) => {
+    router.post(route('tasks.join', { task: taskId }), undefined, {
+        only: [],
+    });
+};
+
 defineOptions({
     layout: MainLayout,
 });
@@ -34,7 +47,7 @@ defineOptions({
                 <Tab value="qna">Q&A</Tab>
             </TabList>
             <Button
-                v-if="$page.props.auth.user.id == room.manager_id"
+                v-if="$page.props.auth.user?.id == room.manager_id"
                 @click="openCreateTaskDialog"
                 outlined
             >
@@ -43,6 +56,42 @@ defineOptions({
         </div>
         <TabPanels class="!bg-transparent">
             <TabPanel value="overview">
+                <Card
+                    class="my-4 px-4 py-4"
+                    v-if="$page.props.auth.user?.id == room.manager_id"
+                >
+                    <template #header>
+                        <h4 class="text-2xl font-bold">
+                            Github repository informations
+                        </h4>
+                    </template>
+                    <template #content>
+                        <span class="flex flex-row gap-2">
+                            <h6 class="text-md font-medium text-white">
+                                Owner:
+                            </h6>
+                            <p class="text-white/60">
+                                {{ room.repository?.owner }}
+                            </p>
+                        </span>
+                        <span class="flex flex-row gap-2">
+                            <h6 class="text-md font-medium text-white">
+                                Repository:
+                            </h6>
+                            <p class="text-white/60">
+                                {{ room.repository?.repository }}
+                            </p>
+                        </span>
+                        <span class="flex flex-row gap-2">
+                            <h6 class="text-md font-medium text-white">
+                                Base branch:
+                            </h6>
+                            <p class="text-white/60">
+                                {{ room.repository?.branch }}
+                            </p>
+                        </span>
+                    </template>
+                </Card>
                 <Card class="my-4 px-4 py-4">
                     <template #header>
                         <h4 class="text-2xl font-bold">Description</h4>
@@ -73,7 +122,9 @@ defineOptions({
                                 {{ task.title || 'empty' }}
                             </li>
                         </ol>
-                        <p class="text-center text-white/60" v-else>(No tasks to see for now)</p>
+                        <p class="text-center text-white/60" v-else>
+                            (No tasks to see for now)
+                        </p>
                     </template>
                 </Card>
             </TabPanel>
@@ -85,6 +136,7 @@ defineOptions({
                         v-for="(task, taskIndex) in $props.room.tasks"
                         :key="task.id"
                         class="w-full border !border-lime-500/20"
+                        pt:header-actions:class="flex flex-row items-center"
                         collapsed
                         toggleable
                     >
@@ -108,8 +160,21 @@ defineOptions({
                         </template>
                         <template
                             #icons
-                            v-if="$page.props.auth.user.id == room.manager_id"
+                            v-if="$page.props.auth.user?.id == room.manager_id"
                         >
+                            <Button
+                                class="me-2 text-sm !text-white hover:!bg-amber-500/5"
+                                v-if="task.status == TaskStatusEnum.Planned"
+                                @click="startTaskServerCall(task.id)"
+                                text
+                            >
+                                Start task
+                            </Button>
+                            <TimeCounter
+                                class="me-4 text-sm !text-white"
+                                v-if="task.status == TaskStatusEnum.Active"
+                                :start-time="task.start_at"
+                            />
                             <Button
                                 class="aspect-square !text-amber-500 hover:!bg-amber-500/5"
                                 severity="contrast"
@@ -122,6 +187,30 @@ defineOptions({
                             >
                                 <Icon name="hi-solid-pencil" />
                             </Button>
+                        </template>
+                        <template #icons v-else>
+                            <Button
+                                class="me-4 !bg-amber-500/5 text-sm !text-amber-500"
+                                :class="[
+                                    task.is_joined
+                                        ? ''
+                                        : 'hover:!bg-amber-500/20',
+                                ]"
+                                v-if="
+                                    !!$page.props.auth.user &&
+                                    task.status == TaskStatusEnum.Active
+                                "
+                                :disabled="task.is_joined"
+                                @click="joinTaskServerCall(task.id)"
+                                text
+                            >
+                                {{ task.is_joined ? 'Joined' : 'Join Task' }}
+                            </Button>
+                            <TimeCounter
+                                class="me-4 text-sm !text-white"
+                                v-if="task.status == TaskStatusEnum.Active"
+                                :start-time="task.start_at"
+                            />
                         </template>
                         <p
                             :class="

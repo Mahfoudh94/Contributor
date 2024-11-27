@@ -16,11 +16,14 @@ const handleSubmit = async () => {
         route('tasks.store'),
         {
             roomId: roomId,
-            title: form.title?.value,
-            description: form.description?.value,
+            title: form.title,
+            description: form.description,
         },
         {
-            onSuccess: () => (isDialogOpen.value = false),
+            onSuccess: () => {
+                isDialogOpen.value = false;
+                form.reset();
+            },
             only: [],
         },
     );

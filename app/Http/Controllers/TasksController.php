@@ -12,6 +12,7 @@ use App\Http\Requests\Tasks\StoreTaskRequest;
 use App\Http\Requests\Tasks\UpdateTaskRequest;
 use App\Models\Room;
 use App\Models\Task;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -43,8 +44,7 @@ class TasksController extends Controller
     {
         $validatedData = $request->validated();
 
-        $room = Room::find($validatedData['roomID']);
-
+        $room = Room::find($validatedData['roomId']);
         if (!$room) {
             return Redirect::back()->with('error', 'Room not found.');
         }
@@ -125,9 +125,7 @@ class TasksController extends Controller
         // Invoke the action to start the task
         StartTask::run($task, $githubPrivateToken);
 
-        return response()->json([
-            'success' => 'Task started successfully.'
-        ]);
+        return Redirect::back()->with('success', 'task started');
     }
 
     /**
@@ -146,8 +144,6 @@ class TasksController extends Controller
         // Invoke the action to start the task
         JoinTask::run($task, auth()->user(), $githubPrivateToken);
 
-        return response()->json([
-            'success' => 'Task Joined successfully.'
-        ]);
+        return Redirect::back()->with('success', 'task joined successfully');
     }
 }

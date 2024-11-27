@@ -11,6 +11,8 @@ use App\Actions\Rooms\UpdateRoom;
 use App\Http\Requests\Rooms\StoreRoomRequest;
 use App\Http\Requests\Rooms\UpdateRoomRequest;
 use App\Models\Room;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -65,11 +67,18 @@ class RoomsController extends Controller implements HasMiddleware
      */
     public function show(string $id)
     {
-        $room = Room::find($id);
+        $room = Room::with([
+            'repository',
+            'tasks' => fn (HasMany $taskBuilder)
+                => $taskBuilder->withExists([
+                    'users as is_joined' => fn (Builder $userBuilder)
+                        => $userBuilder->where('task_user.user_id', \Auth::id())
+            ]),
+        ])
+            ->find($id);
         if (!$room) {
             return Redirect::back()->with('error', 'Room not found.');
         }
-        $room->load('tasks');
         return Inertia::render('Rooms/Show', [
             'room' => $room
         ]);

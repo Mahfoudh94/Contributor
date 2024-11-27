@@ -62,7 +62,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/repertoires', [GithubController::class, 'showProjects']);
 
             // Retrieve Branches from a Selected Repository
-            Route::get('/{repo}/branches', [GithubController::class, 'showBranches']);
+            Route::get('/{repo}/branches', [GithubController::class, 'showBranches'])->name('getBranches');
 
             /*
             // Retrieve Pull Requests (for displaying pull requests in a view)
