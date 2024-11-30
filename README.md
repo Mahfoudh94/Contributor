@@ -1,3 +1,7 @@
+<p align="center">
+ <img width="70%" src="https://github.com/Mahfoudh94/Contributor/blob/main/resources/images/LogoFull.svg" align="center" alt="" />
+</p>
+
 # 🚀 **Smart Collaborative Development Platform** 🌍
 
 Welcome to the **Smart Collaborative Development Platform** — a space where developers, project owners, and innovators connect, collaborate, and create amazing projects together. 💻🤝✨
@@ -57,7 +61,7 @@ git clone https://github.com/Mahfoudh94/Contributor.git
 Make sure **Node.js** and **Composer** are installed on your machine.
 
 ```bash
-cd project-name
+cd Contributor
 npm install
 composer install
 ```
