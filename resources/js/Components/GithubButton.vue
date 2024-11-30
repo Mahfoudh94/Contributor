@@ -11,7 +11,7 @@ const openAuthWindow = () => {
     const top = (window.screen.height - height) / 2;
 
     window.open(
-        usePage().props.GITHUB_REDIRECT_URL as string,
+        usePage().props.GITHUB_APP_INSTALLATION as string,
         'Authentication',
         `width=${width},height=${height},left=${left},top=${top}`,
     );
