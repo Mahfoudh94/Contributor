@@ -35,7 +35,7 @@ class RoomsController extends Controller implements HasMiddleware
     {
         return Inertia::render('Homepage', [
             'rooms' => GetPaginatedRooms::run(),
-            'GITHUB_REDIRECT_URL' => config('services.github.install_url')
+            'GITHUB_APP_INSTALLATION' => config('services.github.install_url')
         ]);
     }
 
