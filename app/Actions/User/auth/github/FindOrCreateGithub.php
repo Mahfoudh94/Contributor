@@ -12,7 +12,11 @@ class FindOrCreateGithub
 {
     use AsAction;
 
-    public function handle(ProviderUser $providerUser)
+    /**
+     * @param ProviderUser $providerUser
+     * @return User
+     */
+    public function handle(ProviderUser $providerUser): User
     {
         $linkedSocialAccount = LinkedSocialAccount::query()->where('provider_name', 'github')
             ->where('provider_id', $providerUser->getId())
