@@ -10,6 +10,7 @@ import OurBenefitsImage from '@images/OurBenefitsImage.svg';
 import Pattern from '@images/Pattern.svg';
 import { Link, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+
 const rooms = usePage().props.rooms as Paginate<Room>;
 
 const isTestimonialChoiceChanged = ref(false);
@@ -17,9 +18,23 @@ const isntTestimonialChoiceChanged = computed({
     get: () => !isTestimonialChoiceChanged.value,
     set: (val: boolean) => (isTestimonialChoiceChanged.value = !val),
 });
+const benefits = [
+    {
+        icon: 'fa-user',
+        text: 'Collaborate seamlessly with talented individuals from around the globe, fostering innovation and diverse perspectives.'
+    },
+    {
+        icon: 'fa-lightbulb',
+        text: 'Enhance your skills by working on real-world projects, gaining experience, and building a portfolio that stands out.'
+    },
+    {
+        icon: 'fa-trophy',
+        text: 'Get recognized for your contributions with awards and accolades that demonstrate your expertise and value.'
+    }
+];
 
 defineOptions({
-    layout: MainLayout,
+    layout: MainLayout
 });
 </script>
 
@@ -93,10 +108,10 @@ defineOptions({
     <template v-else>
         <div class="relative flex flex-col items-center">
             <h1 class="z-10 my-1 text-clip text-5xl font-medium text-white">
-                Juvdashavnothinpeelleskafbadudachechigaw
+                Where Ideas Meet Innovation
             </h1>
             <h1 class="z-10 my-1 text-clip text-4xl font-medium text-white">
-                Astauxtekalonshamilupvevuvenivanovafle
+                Let Curiosity Lead the Way
             </h1>
             <img
                 class="absolute end-0 -translate-y-1/4 select-none"
@@ -128,18 +143,13 @@ defineOptions({
             >
                 <div class="flex flex-col gap-4">
                     <Card
-                        v-for="(_, index) in Array(3)"
+                        v-for="(benefit, index) in benefits"
                         :key="index"
                         pt:content:class="grid grid-cols-[auto_1fr] items-center gap-x-2"
                     >
                         <template #content>
-                            <Icon name="fa-user" class="m-2 fill-primary" />
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Asperiores consequuntur, eum
-                                expedita in molestias quibusdam quisquam tempore
-                                vel veniam voluptatem!
-                            </p>
+                            <Icon :name="benefit.icon" class="m-2 fill-primary" />
+                            <p>{{ benefit.text }}</p>
                         </template>
                     </Card>
                 </div>
@@ -160,12 +170,11 @@ defineOptions({
             </h1>
             <div class="flex w-full grid-cols-2 flex-col items-center md:grid">
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Animi consequuntur ducimus harum, non possimus quam qui
-                    quidem repudiandae suscipit voluptates. Distinctio
-                    exercitationem itaque laboriosam odit suscipit tenetur
-                    voluptate. Officiis, similique?
+                    Your voice matters. Every feedback helps us refine,
+                    innovate, and create a platform that empowers everyone to achieve their goals.
+                    Together, we grow stronger.
                 </p>
+
                 <div class="flex flex-row justify-center">
                     <ToggleButton
                         v-model="isTestimonialChoiceChanged"
@@ -180,11 +189,11 @@ defineOptions({
                 </div>
             </div>
             <div class="h-12"></div>
-            <h4
+<!--            <h4
                 class="my-4 justify-self-center text-center text-2xl font-medium text-white"
             >
                 There is no (enough) responses to show testimonials
-            </h4>
+            </h4>-->
         </section>
     </template>
     <div class="h-32"></div>
