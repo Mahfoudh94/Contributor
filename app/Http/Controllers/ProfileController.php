@@ -31,11 +31,10 @@ class ProfileController extends Controller
 
         $isMe = $user->id == Auth::id();
         $ownRooms = Room::where('owner_id', $user->id)->get();
-        $rooms = Room::where('owner_id', '<>', $user->id)
-            ->whereDoesntHave('users', function ($query) use ($user) {
-                $query->where('id', $user->id);
-            })
+        $rooms = Room::where('owner_id', '!=', $user->id)
+            ->whereDoesntHave('users', fn($q) => $q->whereKey($user->id))
             ->get();
+
         return Inertia::render('Profile/Show', [
             'isMe' => $isMe,
             'profile' => $user,
